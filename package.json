@@ -1,10 +1,9 @@
 {
   "name": "beka-backend",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "server.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node server.js"
   },
 
   "dependencies": {
