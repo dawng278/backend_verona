@@ -3,7 +3,8 @@ dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet'; // Thêm dòng này để import helmet
+import helmet from 'helmet'; // Import helmet
+
 import connectDB from './config/db';
 import authRoutes from './routes/auth';
 
@@ -11,10 +12,14 @@ connectDB();
 
 const app = express();
 
-// Sử dụng helmet trước các route của bạn để áp dụng các chính sách bảo mật
-app.use(helmet());
+app.use(helmet()); // Use helmet here
 app.use(cors());
 app.use(express.json());
+
+// Add a simple route for the root URL to handle the 404 error
+app.get('/', (req, res) => {
+    res.send('API is running successfully!');
+});
 
 app.use('/api/auth', authRoutes);
 
