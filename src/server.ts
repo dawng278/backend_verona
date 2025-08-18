@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
 
 import connectDB from './config/db';
@@ -11,19 +11,28 @@ import authRoutes from './routes/auth';
 connectDB();
 
 const app = express();
-
 app.use(helmet());
 
-// Thêm cấu hình CORS để chỉ cho phép frontend của bạn
-const corsOptions = {
-    origin: 'https://frontend-beka-ilaq.vercel.app',
-    optionsSuccessStatus: 200 // Hỗ trợ trình duyệt cũ
-};
-app.use(cors(corsOptions));
+const allowedOrigins = [
+    'http://localhost:3000',                // dev local
+    'https://frontend-beka-ilaq.vercel.app' // vercel frontend
+];
 
+const corsOptions: CorsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// Add a simple route for the root URL to handle the 404 error
 app.get('/', (req, res) => {
     res.send('API is running successfully!');
 });
