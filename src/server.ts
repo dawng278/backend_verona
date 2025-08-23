@@ -22,6 +22,9 @@ app.use(express.json());
 import authRoutes from "./routes/auth";
 app.use("/api/auth", authRoutes);
 
+import orderRoutes from "./routes/orderRoutes";
+app.use("/api/orders", orderRoutes);
+
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || "";
 
