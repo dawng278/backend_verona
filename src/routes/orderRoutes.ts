@@ -1,21 +1,32 @@
-import { Router, Request, Response } from "express";
-import { Order } from "../models/Order";
+// backend/routes/orderRoutes.js
+import express from "express";
+import Order from "../models/Order";
 
-const router = Router();
+const router = express.Router();
 
-router.post("/", async (req: Request, res: Response) => {
+// Lấy lịch sử đơn hàng theo user
+router.get("/user/:userId", async (req, res) => {
     try {
-        const { userId, items, total } = req.body;
+        const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
+        res.json({ success: true, orders });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Lỗi lấy lịch sử đơn hàng" });
+    }
+});
 
-        if (!userId || !items || !total) {
-            return res.status(400).json({ error: "Missing required fields" });
-        }
+// Huỷ đơn hàng
+router.patch("/:id/cancel", async (req, res) => {
+    try {
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            { status: "cancelled" },
+            { new: true }
+        );
+        if (!order) return res.status(404).json({ success: false, error: "Không tìm thấy đơn hàng" });
 
-        const order = await Order.create({ user: userId, items, total });
-        res.status(201).json(order);
-    } catch (err) {
-        console.error("❌ Error creating order:", err);
-        res.status(500).json({ error: "Server error" });
+        res.json({ success: true, order });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Hủy đơn thất bại" });
     }
 });
 

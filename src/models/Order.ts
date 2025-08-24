@@ -1,32 +1,27 @@
-// backend/src/models/Order.ts
-import mongoose, { Schema, Document } from "mongoose";
+// backend/models/Order.js
+import mongoose from "mongoose";
 
-export interface IOrder extends Document {
-    user: string; // userId tham chiếu tới User
-    items: { productId: string; quantity: number }[];
-    total: number;
-    status: "pending" | "completed" | "cancelled";
-    createdAt: Date;
-}
-
-const OrderSchema: Schema<IOrder> = new Schema(
-    {
-        user: { type: String, required: true },
-        items: [
-            {
-                productId: { type: String, required: true },
-                quantity: { type: Number, required: true, min: 1 },
-            },
-        ],
-        total: { type: Number, required: true },
-        status: {
-            type: String,
-            enum: ["pending", "completed", "cancelled"],
-            default: "pending",
+const OrderSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    items: [
+        {
+            productId: String,
+            name: String,
+            image: String,
+            price: Number,
+            quantity: Number,
         },
+    ],
+    totalAmount: { type: Number, required: true },
+    address: { type: String, required: true },
+    phone: { type: String, required: true },
+    paymentMethod: { type: String, required: true },
+    status: {
+        type: String,
+        enum: ["pending", "paid", "shipped", "completed", "cancelled"], // ✅ có cancelled
+        default: "pending",
     },
-    { timestamps: true }
-);
+    createdAt: { type: Date, default: Date.now },
+});
 
-export const Order =
-    mongoose.models.Order || mongoose.model<IOrder>("Order", OrderSchema);
+export default mongoose.model("Order", OrderSchema);
