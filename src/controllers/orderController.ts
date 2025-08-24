@@ -4,16 +4,19 @@ import Order from "../models/Order";
 
 export const createOrder = async (req: Request, res: Response) => {
     try {
-        const { userId, items, total } = req.body;
+        const { userId, items, total ,address, phone, paymentMethod} = req.body;
 
-        if (!userId || !items || !total) {
+        if (!userId || !items || !total || !address || !phone || !paymentMethod) {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
         const newOrder = new Order({
-            user: userId, // đồng bộ với schema
+            userId,
             items,
-            total,
+            totalAmount: total,
+            address,
+            phone,
+            paymentMethod,
         });
 
         await newOrder.save();
