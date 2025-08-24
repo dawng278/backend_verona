@@ -9,14 +9,25 @@ const app = express();
 // 🔥 Cho phép frontend gọi API
 app.use(
     cors({
-        origin: ["https://frontend-beka-ilaq.vercel.app"],
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true,
-    })
-);
+    origin: [
+        'http://localhost:3000',                          // For local development
+        'https://frontend-beka-ilaq.vercel.app',         // Your Vercel frontend
+        'https://frontend-beka-ilaq.vercel.app/',        // With trailing slash
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'Accept',
+        'Origin'
+    ],
+}));
 
+app.options('*', cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 import authRoutes from "./routes/auth";
