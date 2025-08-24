@@ -1,5 +1,5 @@
-// backend/routes/orderRoutes.js
 import express from "express";
+import { createOrder } from "../controllers/orderController"; // import hàm
 import Order from "../models/Order";
 
 const router = express.Router();
@@ -29,5 +29,8 @@ router.patch("/:id/cancel", async (req, res) => {
         res.status(500).json({ success: false, error: "Hủy đơn thất bại" });
     }
 });
+
+// **Thêm route POST để tạo đơn hàng**
+router.post("/", createOrder);
 
 export default router;
