@@ -1,9 +1,11 @@
+// backend/src/models/Order.ts
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IOrder extends Document {
-    user: string;
+    user: string; // userId tham chiếu tới User
     items: { productId: string; quantity: number }[];
     total: number;
+    status: "pending" | "completed" | "cancelled";
     createdAt: Date;
 }
 
@@ -17,8 +19,14 @@ const OrderSchema: Schema<IOrder> = new Schema(
             },
         ],
         total: { type: Number, required: true },
+        status: {
+            type: String,
+            enum: ["pending", "completed", "cancelled"],
+            default: "pending",
+        },
     },
     { timestamps: true }
 );
 
-export const Order = mongoose.models.Order || mongoose.model<IOrder>("Order", OrderSchema);
+export const Order =
+    mongoose.models.Order || mongoose.model<IOrder>("Order", OrderSchema);
