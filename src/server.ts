@@ -7,27 +7,20 @@ dotenv.config();
 const app = express();
 
 // 🔥 Cho phép frontend gọi API
-app.use(
-    cors({
+app.use(cors({
     origin: [
-        'http://localhost:3000',                          // For local development
-        'https://frontend-beka-ilaq.vercel.app',         // Your Vercel frontend
-        'https://frontend-beka-ilaq.vercel.app/',        // With trailing slash
+        'http://localhost:3000',
+        'https://frontend-beka-ilaq.vercel.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-        'Content-Type',
-        'Authorization',
-        'X-Requested-With',
-        'Accept',
-        'Origin'
-    ],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+console.log('🚀 Starting to register routes...');
 
 // Routes
 import authRoutes from "./routes/auth";
