@@ -10,7 +10,7 @@ const app = express();
 app.use(cors({
     origin: [
         'http://localhost:3000',
-        'https://frontend-beka-ilaq.vercel.app'
+        'https://frontend-verona.vercel.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
